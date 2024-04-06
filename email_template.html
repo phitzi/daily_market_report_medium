@@ -1,0 +1,82 @@
+<html>
+<body>
+<h2><a href="https://finance.yahoo.com/quote/%5EGSPC?p=%5EGSPC">S&P 500</a> {{ data.sp500 }}
+    {% if data.sp_pct_change > 0 %}
+        (<span style="color: green;">+{{ data.sp_pct_change }}%</span>)
+    {% else %}
+        (<span style="color: red;">{{ data.sp_pct_change }}%</span>)
+    {% endif %}
+</h2>
+<h2>52-week high</h2>
+{% if data_52w_high|length > 0 %}
+<table border="1">
+    <thead>
+        <tr>
+            <th>Ticker</th>
+            <th>Name</th>
+            <th>Sector/Industry</th>
+            <th>Capitalization</th>
+            <th>Current Price</th>
+            <th>Change</th>
+            <th>52w High last month</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in data_52w_high %}
+        <tr>
+            <td><a href="https://finance.yahoo.com/quote/{{ stock.ticker }}">{{ stock.ticker }}</a></td>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.sector_industry }}</td>
+            <td>{{ stock.cap }}</td>
+            <td>{{ stock.close }}</td>
+            <td>{{ stock.pct_change }}%</td>
+            <td>{{ stock.last_month_52highs|int }} </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No stocks found.</p>
+{% endif %}
+
+<h2>Cross Over Moving Average {{ data.crossover_msa_days }}</h2>
+{% if data_crossover|length > 0 %}
+<table border="1">
+    <thead>
+        <tr>
+            <th>Ticker</th>
+            <th>Name</th>
+            <th>Sector/Industry</th>
+            <th>Capitalization</th>
+            <th>Current Price</th>
+            <th>Change</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stock in data_crossover %}
+        <tr>
+            <td><a href="https://finance.yahoo.com/quote/{{ stock.ticker }}">{{ stock.ticker }}</a></td>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.sector_industry }}</td>
+            <td>{{ stock.cap }}</td>
+            <td>{{ stock.close }}</td>
+            <td>{{ stock.pct_change }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    <p>No stocks found.</p>
+{% endif %}
+
+{% if errors|length > 0 %}
+<h3>There were errors in the following stocks</h3>
+<p>
+    {% for error in errors %}
+    {{ error.stock }} - {{ error.error }} <br />
+    {% endfor %}
+</p>
+{% endif %}
+
+</body>
+</html>
