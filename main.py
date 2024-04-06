@@ -1,6 +1,5 @@
 import pandas as pd
 import yfinance as yf
-import json
 from sendemail import send_email
 from jinja2 import Template
 from datetime import datetime, timedelta
