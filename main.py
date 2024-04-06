@@ -67,6 +67,7 @@ try:
 except:
     errors.append('Could not get SP500 data')
 
+# create the body of the email and send it
 with open('email_template.html', 'r') as file:
     html_template = file.read()
 template = Template(html_template)
