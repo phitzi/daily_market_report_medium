@@ -13,9 +13,9 @@ stocks = stocks[(stocks['CapCategory'] == 'mega') | (stocks['sector'].isin(['Tec
 errors = []
 l_52w_high = []
 crossover_sma = []
-crossover_sma_days = 200
+crossover_sma_days  = 200
 data = {
-    'crossover_msa_days': crossover_msa_days,}
+    'crossover_sma_days ': crossover_sma_days ,}
 
 # calculate the start date 2 years from now
 current_date = datetime.now()
@@ -43,11 +43,11 @@ for index, row in stocks.iterrows():
                                'pct_change': round(df['pct_change'].iloc[-1] * 100, 2),
                                'last_month_52highs': df['52W_high_count'].iloc[-1]})
 
-        # crossover_msa
-        msa_col = "msa_" + str(crossover_msa_days)
-        df[msa_col] = df['Adj Close'].rolling(window=crossover_msa_days).mean()
-        if df['Adj Close'].iloc[-1] > df[msa_col].iloc[-1] and df['Adj Close'].iloc[-2] < df[msa_col].iloc[-2]:
-            crossover_msa.append({'ticker': stock,
+        # crossover_sma
+        sma_col = "sma_" + str(crossover_sma_days)
+        df[sma_col] = df['Adj Close'].rolling(window=crossover_sma_days).mean()
+        if df['Adj Close'].iloc[-1] > df[sma_col].iloc[-1] and df['Adj Close'].iloc[-2] < df[sma_col].iloc[-2]:
+            crossover_sma.append({'ticker': stock,
                                   'name': row['shortName'],
                                   'sector_industry': f'{row["sector"]} / {row["industry"]}',
                                   'cap': row['CapCategory'],
@@ -71,6 +71,6 @@ except:
 with open('email_template.html', 'r') as file:
     html_template = file.read()
 template = Template(html_template)
-html_output = template.render(data_52w_high=l_52w_high, data_crossover=crossover_msa, errors=errors, data=data)
+html_output = template.render(data_52w_high=l_52w_high, data_crossover=crossover_sma, errors=errors, data=data)
 
 send_email("Daily Stocks Email", html_output)
