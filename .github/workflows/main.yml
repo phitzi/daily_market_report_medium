@@ -9,10 +9,6 @@ jobs: # the jobs that will run sequentially
   build:
     runs-on: ubuntu-latest
     steps:
-
-      - name: checkout repo content
-        uses: actions/checkout@v4 # checkout the repository content to github runner
-
       - name: setup python
         uses: actions/setup-python@v4
         with:
@@ -33,15 +29,3 @@ jobs: # the jobs that will run sequentially
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
         run: python main.py
 
-      - name: commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
-
-      - name: push changes
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
